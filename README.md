@@ -3,13 +3,13 @@ Convert a simple HTML file to WikiMedia format. The original purpose is a fast c
 
 ## Supported
 
-<nowiki>
+```
 * inline formatting: <i>, <b>, <strong>, <span>
 * block elements: <div>, <p>
 * list elements: <ul>, <ol>, <li>
 * heading elements: <h1>, <h2>, ..., <h6>
 * separators: <br>, <hr>
-</nowiki>
+```
 
 ## Unsupported
 
