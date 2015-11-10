@@ -4,7 +4,7 @@ Convert a simple HTML file to WikiMedia format. The original purpose is a fast c
 ## Supported
 
 ```
-* inline formatting: <i>, <b>, <strong>, <span>
+* inline formatting as preformatted text: <i>, <b>, <strong>, <span>
 * block elements: <div>, <p>
 * list elements: <ul>, <ol>, <li>
 * heading elements: <h1>, <h2>, ..., <h6>
@@ -16,7 +16,11 @@ Convert a simple HTML file to WikiMedia format. The original purpose is a fast c
 ```
 * images
 * links
-* sublist: two or more depth listing
+* sublist (two or more depth listing)
+* definition list
+* indent text
+* mixture of different types of list
+* apply <nowiki> tag where content match with wiki control characters
 ```
 
 # Example
