@@ -75,7 +75,10 @@ class HtmlToWiki {
         $result = $this->replaceHTMLHeadingElements($result);
         $result = $this->replaceHTMLSeparatorElements($result);
         $result = $this->trimLines($result);
-        return $result;
+        $result = $this->removeWhitespaces($result);
+        $result = $this->removeWhitelines($result);
+
+        return trim($result);
     }
 
 
@@ -116,6 +119,16 @@ class HtmlToWiki {
     // SIMPLE TEXT CLEANING FUNCTIONS ----------------------------------------------
     public function removeNewLines($text) {
         return trim(preg_replace('/\s+/', ' ', $text));
+    }
+
+    public function removeWhitespaces($text) {
+        for ($i = 0; $i < 5; $i++)
+            $text = str_replace('  ', ' ', $text);
+        return $text;
+    }
+
+    public function removeWhitelines($text) {
+        return preg_replace('/\n(\s*\n)+/', "\n\n", $text);
     }
 
     public function trimLines($text) {
