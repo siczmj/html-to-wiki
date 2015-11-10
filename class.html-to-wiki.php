@@ -76,7 +76,7 @@ class HtmlToWiki {
         $result = $this->replaceHTMLSeparatorElements($result);
         $result = $this->trimLines($result);
         $result = $this->removeWhitespaces($result);
-        $result = $this->removeWhitelines($result);
+        $result = $this->removeBlankLines($result);
 
         return trim($result);
     }
@@ -127,7 +127,7 @@ class HtmlToWiki {
         return $text;
     }
 
-    public function removeWhitelines($text) {
+    public function removeBlankLines($text) {
         return preg_replace('/\n(\s*\n)+/', "\n\n", $text);
     }
 
