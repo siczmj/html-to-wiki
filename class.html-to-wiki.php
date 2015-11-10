@@ -28,10 +28,10 @@ class HtmlToWiki {
         '</p>'      => "\n",
         '<ul>'      => "\n",        // ul
         '</ul>'     => "\n",
+        '<ol>'      => "\n",        // ol
+        '</ol>'     => "\n",
         '<li>'      => "* ",        // li
-        '</li>'     => "\n",
-        '<ol>'      => "# ",        // ol
-        '</ol>'     => "\n"
+        '</li>'     => "\n"
     );
 
     private static $heading = array(
