@@ -13,9 +13,11 @@ Convert a simple HTML file to WikiMedia format. The original purpose is a fast c
 
 ## Unsupported
 
+```
 * images
 * links
 * sublist: two or more depth listing
+```
 
 # Example
 ```php
