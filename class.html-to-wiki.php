@@ -68,8 +68,9 @@ class HtmlToWiki {
 
         // convert
         $result = $this->parseHTMLBody($result);
-        $result = $this->removeHTMLArguments($result);
         $result = $this->removeNewLines($result);
+        $result = $this -> replaceHTMLLinks($result);
+        $result = $this->removeHTMLArguments($result);
         $result = $this->replaceHTMLInlineElements($result);
         $result = $this->replaceHTMLBlockElements($result);
         $result = $this->replaceHTMLHeadingElements($result);
@@ -88,8 +89,29 @@ class HtmlToWiki {
         return trim($matches[1]);
     }
 
+    public function replaceHTMLLinks($html){
+        // Based on: http://www.the-art-of-web.com/php/parse-links/
+        preg_match_all('/<a\s[^>]*href\s*=\s*(\"??)([^\" >]*?)\\1[^>]*>(.*)<\/a>/siU', $html, $matches, PREG_PATTERN_ORDER);
+        if(!empty($matches)){
+            for($i=0; $i<count($matches[0]); $i++){
+                $match = trim($matches[0][$i]);
+                $link = trim($matches[2][$i]);
+                $text = $this-> removeHTMLElements(trim($matches[3][$i]));
+                if(!empty($match) &&!empty($link) && !empty($text)){
+                    $wiki_link = '[' . $link . ' ' . $text . ']';
+                    $html = str_replace($match, $wiki_link, $html);
+                }
+            }
+        }
+        return $html;
+    }
+
     public function removeHTMLArguments($html) {
         return preg_replace('/<([a-z][a-z0-9]*)[^>]*?(\/?)>/i', '<$1$2>', $html);
+    }
+
+    public function removeHTMLElements($html){
+        return trim(strip_tags($html));
     }
 
     public function replaceHTMLInlineElements($html) {
