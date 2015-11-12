@@ -69,7 +69,7 @@ class HtmlToWiki {
         // convert
         $result = $this->parseHTMLBody($result);
         $result = $this->removeNewLines($result);
-        $result = $this -> replaceHTMLLinks($result);
+        $result = $this->replaceHTMLLinks($result);
         $result = $this->removeHTMLArguments($result);
         $result = $this->replaceHTMLInlineElements($result);
         $result = $this->replaceHTMLBlockElements($result);
@@ -86,18 +86,18 @@ class HtmlToWiki {
     // HTML CLEANING & CONVERTER FUNCTIONS ----------------------------------------------
     public function parseHTMLBody($html) {
         preg_match('/<body[^>]*>(.*?)<\/body>/s', $html, $matches);
-        return trim($matches[1]);
+        return !empty($matches) ? trim($matches[1]) :  trim($html);
     }
 
-    public function replaceHTMLLinks($html){
+    public function replaceHTMLLinks($html) {
         // Based on: http://www.the-art-of-web.com/php/parse-links/
         preg_match_all('/<a\s[^>]*href\s*=\s*(\"??)([^\" >]*?)\\1[^>]*>(.*)<\/a>/siU', $html, $matches, PREG_PATTERN_ORDER);
-        if(!empty($matches)){
-            for($i=0; $i<count($matches[0]); $i++){
+        if (!empty($matches)) {
+            for ($i = 0; $i < count($matches[0]); $i++) {
                 $match = trim($matches[0][$i]);
                 $link = trim($matches[2][$i]);
-                $text = $this-> removeHTMLElements(trim($matches[3][$i]));
-                if(!empty($match) &&!empty($link) && !empty($text)){
+                $text = $this->removeHTMLElements(trim($matches[3][$i]));
+                if (!empty($match) && !empty($link) && !empty($text)) {
                     $wiki_link = '[' . $link . ' ' . $text . ']';
                     $html = str_replace($match, $wiki_link, $html);
                 }
@@ -110,7 +110,7 @@ class HtmlToWiki {
         return preg_replace('/<([a-z][a-z0-9]*)[^>]*?(\/?)>/i', '<$1$2>', $html);
     }
 
-    public function removeHTMLElements($html){
+    public function removeHTMLElements($html) {
         return trim(strip_tags($html));
     }
 
