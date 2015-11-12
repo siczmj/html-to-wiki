@@ -78,6 +78,7 @@ class HtmlToWiki {
         $result = $this->trimLines($result);
         $result = $this->removeWhitespaces($result);
         $result = $this->removeBlankLines($result);
+        $result = $this->removeHTMLElements($result);
 
         return trim($result);
     }
@@ -86,7 +87,7 @@ class HtmlToWiki {
     // HTML CLEANING & CONVERTER FUNCTIONS ----------------------------------------------
     public function parseHTMLBody($html) {
         preg_match('/<body[^>]*>(.*?)<\/body>/s', $html, $matches);
-        return !empty($matches) ? trim($matches[1]) :  trim($html);
+        return !empty($matches) ? trim($matches[1]) : trim($html);
     }
 
     public function replaceHTMLLinks($html) {
