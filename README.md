@@ -21,6 +21,7 @@ Convert a simple HTML file to WikiMedia format. The original purpose is a fast c
 * indent text
 * mixture of different types of list
 * apply <nowiki> tag where content match with wiki control characters
+* all style attributes skipped
 ```
 
 # Example
