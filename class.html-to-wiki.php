@@ -12,10 +12,10 @@ class HtmlToWiki {
     private static $inline = array(
         '<i>'       => "''",        // italic
         '</i>'      => "''",
-        '<b>'       => "'''",       // bold
-        '</b>'      => "'''",
-        '<strong>'  => "'''",
-        '</strong>' => "'''",
+        '<b>'       => " '''",       // bold
+        '</b>'      => "''' ",
+        '<strong>'  => " '''",
+        '</strong>' => "''' ",
         '<span>'    => "",          // span
         '</span>'   => "",
         '&nbsp;'    => " "
