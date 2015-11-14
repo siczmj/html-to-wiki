@@ -191,6 +191,7 @@ class HtmlToWiki {
         $rows = explode("\n", $wiki);
         for($i=0; $i<count($rows); $i++){
             if(!empty($rows[$i])){
+                $rows[$i] = $this -> fixHeadings($rows[$i]);
                 $rows[$i] = $this -> fixBulletsAndHyphens($rows[$i]);
                 $rows[$i] = $this -> fixRow($rows[$i]);
             }
@@ -198,6 +199,12 @@ class HtmlToWiki {
         $wiki = implode("\n", $rows);
         $wiki = $this -> fixListsEmptyRows($wiki);
         return $wiki;
+    }
+
+    public function fixHeadings($row){
+        if($this->startsWith($row, "="))
+            return preg_replace("/^(=+\s+)'''(.*)'''\s+(=+)$/u", '$1 $2 $3', $row);
+        return $row;
     }
 
     public function fixBulletsAndHyphens($row){
@@ -218,6 +225,14 @@ class HtmlToWiki {
 
     public function fixListsEmptyRows($wiki){
         return preg_replace("/\n\n\*/i", "\n*", $wiki);
+    }
+
+
+    // Utils
+    private function startsWith($haystack, $needle)
+    {
+        $length = strlen($needle);
+        return (substr($haystack, 0, $length) === $needle);
     }
 
 }
