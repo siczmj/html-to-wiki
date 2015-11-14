@@ -7,7 +7,7 @@ Convert a simple HTML file to WikiMedia format. The original purpose is a fast c
 * inline formatting as preformatted text: <i>, <b>, <strong>, <span>
 * links <a>
 * block elements: <div>, <p>
-* list elements: <ul>, <ol>, <li>
+* list elements: <li>
 * heading elements: <h1>, <h2>, ..., <h6>
 * separators: <br>, <hr>
 ```
