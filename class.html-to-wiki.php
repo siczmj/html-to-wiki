@@ -55,6 +55,25 @@ class HtmlToWiki {
         '<hr>'      => "---\n",
         '<hr/>'     => "---\n"
     );
+
+    private static $bullets_and_hyphens = array(
+        // BULLETS
+        "•",    // \x{2022} --> BULLET
+        "∙",    // \x{2219} --> BULLET OPERATOR
+        "◦",    // \x{25E6} --> WHITE BULLET
+        "◘",   // \x{25D8} --> INVERSE BULLET
+        "⦿",   // \x{29BF} --> CIRCLED BULLET
+        "‣",    // \x{2023} --> TRIANGULAR BULLET
+        "⁃",    // \x{2043} --> HYPHEN BULLET
+        "·",    // \x{00B7} --> MIDDLE DOT
+
+        // HYPHENS
+        "-",     // \x{002D} --> HYPHEN-MINUS
+        "⁻",     // \x{207B} --> SUPERSCRIPT MINUS
+        "₋",     // \x{208B} --> SUBSCRIPT MINUS
+        "﹣",    // \x{FE63} --> SMALL HYPHEN-MINUS
+        "－"     // \x{FF0D} --> FULLWIDTH HYPHEN-MINUS
+    );
     //@formatter:on
 
 
@@ -63,22 +82,30 @@ class HtmlToWiki {
      * @return String
      */
     public function toWiki($html) {
-        // trim
+        // TRIM --------------------------------
         $result = trim($html);
 
-        // convert
+        // CONVERSION --------------------------
+        // 1. Get the payload
         $result = $this->parseHTMLBody($result);
+        // 2. Make single line to prevent new-lines problems
         $result = $this->removeNewLines($result);
+        // 3. Parse elements (that depend attributes like <a href...>)
         $result = $this->replaceHTMLLinks($result);
+        // 4. Clean unnecessary HTML attributes
         $result = $this->removeHTMLArguments($result);
+        // 5. Parse elements
         $result = $this->replaceHTMLInlineElements($result);
         $result = $this->replaceHTMLBlockElements($result);
         $result = $this->replaceHTMLHeadingElements($result);
         $result = $this->replaceHTMLSeparatorElements($result);
+        // 6. Clean Wiki
         $result = $this->trimLines($result);
         $result = $this->removeWhitespaces($result);
         $result = $this->removeBlankLines($result);
         $result = $this->removeHTMLElements($result);
+        // 7. Fix Wiki content
+        $result = $this->fixWiki($result);
 
         return trim($result);
     }
@@ -158,5 +185,39 @@ class HtmlToWiki {
         return implode("\n", array_map('trim', explode("\n", $text)));
     }
 
+
+    // CONTENT FIXING -------------------------------------------------------------
+    public function fixWiki($wiki) {
+        $rows = explode("\n", $wiki);
+        for($i=0; $i<count($rows); $i++){
+            if(!empty($rows[$i])){
+                $rows[$i] = $this -> fixBulletsAndHyphens($rows[$i]);
+                $rows[$i] = $this -> fixRow($rows[$i]);
+            }
+        }
+        $wiki = implode("\n", $rows);
+        $wiki = $this -> fixListsEmptyRows($wiki);
+        return $wiki;
+    }
+
+    public function fixBulletsAndHyphens($row){
+        $end = min(mb_strpos($row, ' '), mb_strlen($row));
+        $part = mb_substr($row, 0, $end);
+        foreach(self::$bullets_and_hyphens as $bullet)
+            $part = str_ireplace($bullet, "*", $part);
+        $only_first_match = 1;
+        $row = substr_replace($row, $part, 0, $end);
+        $row = str_replace("'''* '''", "* ", $row, $only_first_match);
+        return $row;
+    }
+
+    public function fixRow($row){
+        if(trim($row, "'= ") == '') return '';
+        return $row;
+    }
+
+    public function fixListsEmptyRows($wiki){
+        return preg_replace("/\n\n\*/i", "\n*", $wiki);
+    }
 
 }
